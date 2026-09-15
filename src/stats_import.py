@@ -1,5 +1,6 @@
 import os
 import time
+
 import requests
 import psycopg
 from dotenv import load_dotenv
@@ -8,6 +9,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_key = os.getenv("API_FOOTBALL_KEY")
+
+batch_size = 20
+request_delay = 7
+max_retries = 5
 
 
 def percentage_to_number(value):
@@ -37,8 +42,9 @@ with conn.cursor() as cursor:
         WHERE f.status = 'FT'
           AND s.fixture_id IS NULL
         ORDER BY f.match_date
-        LIMIT 20;
-        """
+        LIMIT %s;
+        """,
+        (batch_size,)
     )
 
     fixtures = cursor.fetchall()
@@ -61,18 +67,38 @@ for row in fixtures:
         "fixture": fixture_id
     }
 
-    response = requests.get(
-        url,
-        headers=headers,
-        params=params
-    )
+    data = None
 
-    data = response.json()
+    # retry request if rate limit is reached
+    for attempt in range(max_retries):
 
-    if data.get("errors"):
-        print("api error:", data["errors"])
+        response = requests.get(
+            url,
+            headers=headers,
+            params=params
+        )
+
+        data = response.json()
+
+        if not data.get("errors"):
+            break
+
+        errors = data["errors"]
+
+        if "rateLimit" in errors:
+            print("rate limit reached, waiting...")
+            time.sleep(10)
+            continue
+
+        print("api error:", errors)
+        data = None
+        break
+
+    if data is None or data.get("errors"):
+        print("fixture skipped:", fixture_id)
         continue
 
+    # save statistics
     with conn.cursor() as cursor:
 
         for team_data in data["response"]:
@@ -159,7 +185,7 @@ for row in fixtures:
         response.headers.get("x-ratelimit-requests-remaining")
     )
 
-    time.sleep(7) # changes with api-football plan (currently free => 10 requests per minute)
+    time.sleep(request_delay)
 
 conn.close()
 
