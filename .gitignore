@@ -1,0 +1,20 @@
+# Environment variables
+.env
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+
+# Data
+data/raw/
+data/processed/
+
+# ML models
+*.pkl
+*.joblib
