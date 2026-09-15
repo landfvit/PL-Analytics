@@ -3,6 +3,7 @@ import requests
 import psycopg
 from dotenv import load_dotenv
 
+
 load_dotenv()
 
 API_key = os.getenv("API_FOOTBALL_KEY")
@@ -18,6 +19,7 @@ params = {
     "season": 2024
 }
 
+# get fixtures from api
 response = requests.get(
     url,
     headers=headers,
@@ -26,17 +28,20 @@ response = requests.get(
 
 data = response.json()
 
-print("TOTAL FIXTURES:", data["results"])
+print("Total fixtures:", data["results"])
+
 print(
     "Remaining:",
     response.headers.get("x-ratelimit-requests-remaining")
 )
 
+# connect to database
 conn = psycopg.connect(
     host=os.getenv("DB_HOST"),
     port=os.getenv("DB_PORT"),
     dbname=os.getenv("DB_NAME"),
-    user=os.getenv("DB_USER")
+    user=os.getenv("DB_USER"),
+    password=os.getenv("DB_PASSWORD")
 )
 
 with conn.cursor() as cursor:
@@ -51,7 +56,45 @@ with conn.cursor() as cursor:
         home_team = teams["home"]
         away_team = teams["away"]
 
-        # 1. HOME TEAM
+        # insert league
+        cursor.execute(
+            """
+            INSERT INTO leagues (
+                league_id,
+                league_name,
+                country_name
+            )
+            VALUES (%s, %s, %s)
+            ON CONFLICT (league_id)
+            DO UPDATE SET
+                league_name = EXCLUDED.league_name,
+                country_name = EXCLUDED.country_name;
+            """,
+            (
+                league["id"],
+                league["name"],
+                league["country"]
+            )
+        )
+
+        # insert season
+        cursor.execute(
+            """
+            INSERT INTO seasons (
+                league_id,
+                season
+            )
+            VALUES (%s, %s)
+            ON CONFLICT (league_id, season)
+            DO NOTHING;
+            """,
+            (
+                league["id"],
+                league["season"]
+            )
+        )
+
+        # insert home team
         cursor.execute(
             """
             INSERT INTO teams (
@@ -69,7 +112,7 @@ with conn.cursor() as cursor:
             )
         )
 
-        # 2. AWAY TEAM
+        # insert away team
         cursor.execute(
             """
             INSERT INTO teams (
@@ -87,7 +130,7 @@ with conn.cursor() as cursor:
             )
         )
 
-        # 3. FIXTURE
+        # insert fixture
         cursor.execute(
             """
             INSERT INTO fixtures (
@@ -97,24 +140,22 @@ with conn.cursor() as cursor:
                 match_date,
                 status,
                 home_team_id,
-                home_team_name,
                 away_team_id,
-                away_team_name,
                 home_goals,
                 away_goals
             )
             VALUES (
                 %s, %s, %s, %s, %s,
-                %s, %s, %s, %s, %s, %s
+                %s, %s, %s, %s
             )
             ON CONFLICT (fixture_id)
             DO UPDATE SET
+                league_id = EXCLUDED.league_id,
+                season = EXCLUDED.season,
                 match_date = EXCLUDED.match_date,
                 status = EXCLUDED.status,
                 home_team_id = EXCLUDED.home_team_id,
-                home_team_name = EXCLUDED.home_team_name,
                 away_team_id = EXCLUDED.away_team_id,
-                away_team_name = EXCLUDED.away_team_name,
                 home_goals = EXCLUDED.home_goals,
                 away_goals = EXCLUDED.away_goals;
             """,
@@ -125,18 +166,13 @@ with conn.cursor() as cursor:
                 fixture["date"],
                 fixture["status"]["short"],
                 home_team["id"],
-                home_team["name"],
                 away_team["id"],
-                away_team["name"],
                 goals["home"],
                 goals["away"]
             )
         )
 
+# save changes
 conn.commit()
 conn.close()
-
-
-
-
 
