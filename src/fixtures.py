@@ -31,6 +31,7 @@ print(
     "Remaining:",
     response.headers.get("x-ratelimit-requests-remaining")
 )
+
 conn = psycopg.connect(
     host=os.getenv("DB_HOST"),
     port=os.getenv("DB_PORT"),
@@ -47,6 +48,46 @@ with conn.cursor() as cursor:
         teams = match["teams"]
         goals = match["goals"]
 
+        home_team = teams["home"]
+        away_team = teams["away"]
+
+        # 1. HOME TEAM
+        cursor.execute(
+            """
+            INSERT INTO teams (
+                team_id,
+                team_name
+            )
+            VALUES (%s, %s)
+            ON CONFLICT (team_id)
+            DO UPDATE SET
+                team_name = EXCLUDED.team_name;
+            """,
+            (
+                home_team["id"],
+                home_team["name"]
+            )
+        )
+
+        # 2. AWAY TEAM
+        cursor.execute(
+            """
+            INSERT INTO teams (
+                team_id,
+                team_name
+            )
+            VALUES (%s, %s)
+            ON CONFLICT (team_id)
+            DO UPDATE SET
+                team_name = EXCLUDED.team_name;
+            """,
+            (
+                away_team["id"],
+                away_team["name"]
+            )
+        )
+
+        # 3. FIXTURE
         cursor.execute(
             """
             INSERT INTO fixtures (
@@ -68,7 +109,12 @@ with conn.cursor() as cursor:
             )
             ON CONFLICT (fixture_id)
             DO UPDATE SET
+                match_date = EXCLUDED.match_date,
                 status = EXCLUDED.status,
+                home_team_id = EXCLUDED.home_team_id,
+                home_team_name = EXCLUDED.home_team_name,
+                away_team_id = EXCLUDED.away_team_id,
+                away_team_name = EXCLUDED.away_team_name,
                 home_goals = EXCLUDED.home_goals,
                 away_goals = EXCLUDED.away_goals;
             """,
@@ -78,10 +124,10 @@ with conn.cursor() as cursor:
                 league["season"],
                 fixture["date"],
                 fixture["status"]["short"],
-                teams["home"]["id"],
-                teams["home"]["name"],
-                teams["away"]["id"],
-                teams["away"]["name"],
+                home_team["id"],
+                home_team["name"],
+                away_team["id"],
+                away_team["name"],
                 goals["home"],
                 goals["away"]
             )
@@ -89,5 +135,8 @@ with conn.cursor() as cursor:
 
 conn.commit()
 conn.close()
+
+
+
 
 
