@@ -1,14 +1,18 @@
 from pathlib import Path
 
-from fastapi import FastAPI, Query
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, HTTPException, Query, Request
+from fastapi.responses import FileResponse, HTMLResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 
 from api.database import fetch_all, fetch_one
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 WEB_DIR = BASE_DIR / "web"
+TEMPLATES_DIR = WEB_DIR / "templates"
+PUBLIC_STATIC_DIR = WEB_DIR / "static"
 
 
 app = FastAPI(
@@ -17,6 +21,7 @@ app = FastAPI(
 )
 
 
+# legacy static files for the developer dashboard
 app.mount(
     "/static",
     StaticFiles(directory=WEB_DIR),
@@ -24,10 +29,62 @@ app.mount(
 )
 
 
-@app.get("/", include_in_schema=False)
-def dashboard():
+# public website assets
+app.mount(
+    "/assets",
+    StaticFiles(directory=PUBLIC_STATIC_DIR),
+    name="assets"
+)
+
+
+templates = Jinja2Templates(
+    directory=TEMPLATES_DIR
+)
+
+
+@app.get(
+    "/",
+    response_class=HTMLResponse,
+    include_in_schema=False
+)
+def home(request: Request):
+    return templates.TemplateResponse(
+        request=request,
+        name="index.html",
+        context={
+            "sport": "football",
+            "active_page": "scores"
+        }
+    )
+
+
+@app.get(
+    "/matches/{fixture_id}",
+    response_class=HTMLResponse,
+    include_in_schema=False
+)
+def match_page(
+    request: Request,
+    fixture_id: int
+):
+    return templates.TemplateResponse(
+        request=request,
+        name="match.html",
+        context={
+            "sport": "football",
+            "active_page": "scores",
+            "fixture_id": fixture_id
+        }
+    )
+
+
+@app.get(
+    "/admin",
+    include_in_schema=False
+)
+def admin_dashboard():
     return FileResponse(
-        WEB_DIR / "index.html"
+        WEB_DIR / "admin.html"
     )
 
 
@@ -313,6 +370,105 @@ def get_teams():
     return {
         "count": len(rows),
         "teams": rows
+    }
+
+
+@app.get("/api/fixtures/{fixture_id}")
+def get_fixture_detail(
+    fixture_id: int
+):
+    fixture = fetch_one(
+        """
+        SELECT
+            f.fixture_id,
+            f.league_id,
+            f.season,
+            f.match_date,
+            f.status,
+
+            f.home_team_id,
+            home.team_name AS home_team,
+
+            f.away_team_id,
+            away.team_name AS away_team,
+
+            f.home_goals,
+            f.away_goals
+
+        FROM fixtures f
+
+        JOIN teams home
+            ON f.home_team_id = home.team_id
+
+        JOIN teams away
+            ON f.away_team_id = away.team_id
+
+        WHERE f.fixture_id = %s;
+        """,
+        (
+            fixture_id,
+        )
+    )
+
+    if fixture is None:
+        raise HTTPException(
+            status_code=404,
+            detail="Fixture not found"
+        )
+
+    statistics = fetch_all(
+        """
+        SELECT
+            s.team_id,
+            t.team_name,
+
+            s.shots_on_goal,
+            s.shots_off_goal,
+            s.total_shots,
+            s.blocked_shots,
+
+            s.shots_inside_box,
+            s.shots_outside_box,
+
+            s.fouls,
+            s.corner_kicks,
+            s.offsides,
+
+            s.ball_possession,
+
+            s.yellow_cards,
+            s.red_cards,
+
+            s.goalkeeper_saves,
+
+            s.total_passes,
+            s.passes_accurate,
+            s.passes_percentage
+
+        FROM fixture_statistics s
+
+        JOIN teams t
+            ON s.team_id = t.team_id
+
+        WHERE s.fixture_id = %s
+
+        ORDER BY
+            CASE
+                WHEN s.team_id = %s
+                THEN 0
+                ELSE 1
+            END;
+        """,
+        (
+            fixture_id,
+            fixture["home_team_id"]
+        )
+    )
+
+    return {
+        "fixture": fixture,
+        "statistics": statistics,
+        "statistics_count": len(statistics)
     }
 
 

@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Premier League | PL Analytics
+{% endblock %}
+
+
+{% block styles %}
+
+<link
+    rel="stylesheet"
+    href="/assets/css/home.css?v=2"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div class="page-layout">
+
+    <aside class="left-sidebar">
+
+        <section class="sidebar-section">
+
+            <h2 class="sidebar-heading">
+                Competitions
+            </h2>
+
+
+            <button
+                class="competition-button active"
+                type="button"
+            >
+
+                <span class="competition-badge">
+                    PL
+                </span>
+
+                <span class="competition-info">
+
+                    <strong>
+                        Premier League
+                    </strong>
+
+                    <small>
+                        England
+                    </small>
+
+                </span>
+
+            </button>
+
+        </section>
+
+
+        <section class="sidebar-section">
+
+            <h2 class="sidebar-heading">
+                Season
+            </h2>
+
+            <select
+                id="season-select"
+                class="season-select"
+            >
+            </select>
+
+        </section>
+
+
+        <section class="sidebar-section desktop-only">
+
+            <h2 class="sidebar-heading">
+                Quick links
+            </h2>
+
+            <div class="sidebar-links">
+
+                <button
+                    class="sidebar-link active"
+                    type="button"
+                >
+                    Matches
+                </button>
+
+                <button
+                    class="sidebar-link disabled"
+                    type="button"
+                >
+                    Standings
+                </button>
+
+                <button
+                    class="sidebar-link disabled"
+                    type="button"
+                >
+                    Teams
+                </button>
+
+                <button
+                    class="sidebar-link disabled"
+                    type="button"
+                >
+                    Statistics
+                </button>
+
+            </div>
+
+        </section>
+
+    </aside>
+
+
+    <div class="main-column">
+
+        <section class="competition-card">
+
+            <div class="competition-card-main">
+
+                <div class="competition-large-badge">
+                    PL
+                </div>
+
+                <div class="competition-card-text">
+
+                    <span class="competition-country-label">
+                        England
+                    </span>
+
+                    <h1>
+                        Premier League
+                    </h1>
+
+                    <p>
+                        Results, fixtures and match statistics
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="competition-card-side">
+
+                <span
+                    id="api-indicator"
+                    class="api-indicator"
+                >
+                    connecting
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <section class="matches-panel">
+
+            <header class="matches-panel-header">
+
+                <div>
+
+                    <h2>
+                        Matches
+                    </h2>
+
+                    <p id="match-summary">
+                        Loading matches...
+                    </p>
+
+                </div>
+
+
+                <div class="match-filter-tabs">
+
+                    <button
+                        class="match-filter-tab active"
+                        type="button"
+                    >
+                        All
+                    </button>
+
+                    <button
+                        class="match-filter-tab disabled"
+                        type="button"
+                    >
+                        Finished
+                    </button>
+
+                    <button
+                        class="match-filter-tab disabled"
+                        type="button"
+                    >
+                        Upcoming
+                    </button>
+
+                </div>
+
+            </header>
+
+
+            <div
+                id="matches-container"
+                class="matches-container"
+            >
+
+                <div class="loading-card">
+                    Loading Premier League matches...
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+
+    <aside class="right-sidebar">
+
+        <section class="right-card">
+
+            <h2 class="right-card-title">
+                Premier League
+            </h2>
+
+            <div class="competition-details">
+
+                <div class="detail-row">
+
+                    <span>
+                        Country
+                    </span>
+
+                    <strong>
+                        England
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Teams
+                    </span>
+
+                    <strong>
+                        20
+                    </strong>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <span>
+                        Matches
+                    </span>
+
+                    <strong id="sidebar-match-count">
+                        -
+                    </strong>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <section class="right-card">
+
+            <h2 class="right-card-title">
+                Coming soon
+            </h2>
+
+            <div class="feature-list">
+
+                <div class="feature-item">
+                    Standings
+                </div>
+
+                <div class="feature-item">
+                    Team profiles
+                </div>
+
+                <div class="feature-item">
+                    Player statistics
+                </div>
+
+                <div class="feature-item">
+                    Match predictions
+                </div>
+
+            </div>
+
+        </section>
+
+    </aside>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="/assets/js/home.js?v=1"
+    defer
+></script>
+
+{% endblock %}

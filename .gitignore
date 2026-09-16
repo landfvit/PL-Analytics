@@ -1,20 +1,47 @@
-# Environment variables
-.env
+# macos
+.DS_Store
 
-# Python
+# python
 __pycache__/
-*.pyc
+*.py[cod]
+*.pyo
+*.pyd
+
+# virtual environment
 .venv/
 venv/
 
-# IDE
+# environment variables
+.env
+
+# pytest
+.pytest_cache/
+
+# type checking
+.mypy_cache/
+.pyright/
+
+# coverage
+.coverage
+htmlcov/
+
+# jupyter
+.ipynb_checkpoints/
+
+# vscode
 .vscode/
+
+# pycharm
 .idea/
 
-# Data
-data/raw/
-data/processed/
+# logs
+*.log
 
-# ML models
-*.pkl
-*.joblib
+# temporary files
+*.tmp
+*.temp
+
+# build files
+build/
+dist/
+*.egg-info/

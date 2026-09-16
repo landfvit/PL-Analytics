@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+
+{% block title %}
+Match | PL Analytics
+{% endblock %}
+
+
+{% block styles %}
+
+<link
+    rel="stylesheet"
+    href="/assets/css/match.css?v=1"
+>
+
+{% endblock %}
+
+
+{% block content %}
+
+<div
+    id="match-page"
+    class="match-page"
+    data-fixture-id="{{ fixture_id }}"
+>
+
+    <div class="match-page-inner">
+
+        <a
+            href="/"
+            class="back-link"
+        >
+            ← Back to matches
+        </a>
+
+
+        <section class="scoreboard">
+
+            <div class="match-meta">
+
+                <span>
+                    Premier League
+                </span>
+
+                <span id="match-date">
+                    Loading...
+                </span>
+
+            </div>
+
+
+            <div class="scoreboard-main">
+
+                <div class="scoreboard-team home-team">
+
+                    <div class="team-placeholder">
+                        H
+                    </div>
+
+                    <h1 id="home-team">
+                        Home
+                    </h1>
+
+                </div>
+
+
+                <div class="scoreboard-center">
+
+                    <div
+                        id="match-status"
+                        class="match-status-badge"
+                    >
+                        -
+                    </div>
+
+                    <div class="main-score">
+
+                        <span id="home-score">
+                            -
+                        </span>
+
+                        <span class="score-separator">
+                            :
+                        </span>
+
+                        <span id="away-score">
+                            -
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="scoreboard-team away-team">
+
+                    <div class="team-placeholder">
+                        A
+                    </div>
+
+                    <h1 id="away-team">
+                        Away
+                    </h1>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <nav class="match-navigation">
+
+            <button
+                class="match-navigation-item active"
+                type="button"
+            >
+                Summary
+            </button>
+
+            <button
+                class="match-navigation-item"
+                type="button"
+            >
+                Statistics
+            </button>
+
+            <button
+                class="match-navigation-item disabled"
+                type="button"
+            >
+                Lineups
+            </button>
+
+            <button
+                class="match-navigation-item disabled"
+                type="button"
+            >
+                H2H
+            </button>
+
+            <button
+                class="match-navigation-item disabled"
+                type="button"
+            >
+                Prediction
+            </button>
+
+        </nav>
+
+
+        <section class="statistics-card">
+
+            <header class="statistics-header">
+
+                <h2>
+                    Match statistics
+                </h2>
+
+            </header>
+
+
+            <div
+                id="statistics-container"
+                class="statistics-container"
+            >
+
+                <div class="statistics-loading">
+                    Loading statistics...
+                </div>
+
+            </div>
+
+        </section>
+
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+<script
+    src="/assets/js/match.js?v=1"
+    defer
+></script>
+
+{% endblock %}

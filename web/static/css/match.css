@@ -1,0 +1,507 @@
+.match-page {
+    width: 100%;
+}
+
+
+.match-page-inner {
+    max-width: 920px;
+
+    margin: 0 auto;
+
+    padding:
+        var(--space-5)
+        var(--space-5)
+        var(--space-7);
+}
+
+
+.back-link {
+    display: inline-flex;
+
+    margin-bottom:
+        var(--space-3);
+
+    color:
+        var(--text-secondary);
+
+    font-size:
+        var(--font-sm);
+
+    font-weight:
+        600;
+}
+
+
+.back-link:hover {
+    color:
+        var(--text-primary);
+}
+
+
+.scoreboard {
+    overflow: hidden;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius-md);
+
+    box-shadow:
+        var(--shadow-sm);
+}
+
+
+.match-meta {
+    min-height: 44px;
+
+    padding:
+        0
+        var(--space-4);
+
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    gap:
+        var(--space-4);
+
+    border-bottom:
+        1px solid
+        var(--border);
+
+    color:
+        var(--text-secondary);
+
+    font-size:
+        var(--font-xs);
+}
+
+
+.scoreboard-main {
+    min-height: 220px;
+
+    padding:
+        var(--space-6);
+
+    display: grid;
+
+    grid-template-columns:
+        1fr
+        180px
+        1fr;
+
+    align-items: center;
+
+    gap:
+        var(--space-5);
+}
+
+
+.scoreboard-team {
+    min-width: 0;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap:
+        var(--space-3);
+
+    text-align: center;
+}
+
+
+.team-placeholder {
+    width: 72px;
+    height: 72px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius:
+        18px;
+
+    background:
+        var(--header);
+
+    color:
+        white;
+
+    font-size:
+        var(--font-lg);
+
+    font-weight:
+        850;
+}
+
+
+.scoreboard-team h1 {
+    margin: 0;
+
+    font-size:
+        var(--font-lg);
+
+    line-height:
+        1.25;
+}
+
+
+.scoreboard-center {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    gap:
+        var(--space-3);
+}
+
+
+.match-status-badge {
+    padding:
+        5px
+        9px;
+
+    border-radius:
+        999px;
+
+    background:
+        var(--surface-soft);
+
+    color:
+        var(--text-secondary);
+
+    font-size:
+        var(--font-xs);
+
+    font-weight:
+        700;
+}
+
+
+.main-score {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap:
+        var(--space-3);
+
+    font-size:
+        42px;
+
+    font-weight:
+        800;
+
+    letter-spacing:
+        -0.04em;
+}
+
+
+.score-separator {
+    color:
+        var(--text-muted);
+
+    font-weight:
+        400;
+}
+
+
+.match-navigation {
+    margin-top:
+        var(--space-3);
+
+    min-height: 50px;
+
+    padding:
+        0
+        var(--space-2);
+
+    display: flex;
+
+    align-items: stretch;
+
+    gap:
+        var(--space-1);
+
+    overflow-x: auto;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius-md);
+}
+
+
+.match-navigation-item {
+    padding:
+        0
+        var(--space-4);
+
+    position: relative;
+
+    border: 0;
+
+    background:
+        transparent;
+
+    color:
+        var(--text-secondary);
+
+    font-size:
+        var(--font-sm);
+
+    font-weight:
+        600;
+
+    white-space:
+        nowrap;
+}
+
+
+.match-navigation-item.active {
+    color:
+        var(--text-primary);
+}
+
+
+.match-navigation-item.active::after {
+    content: "";
+
+    position: absolute;
+
+    left:
+        var(--space-4);
+
+    right:
+        var(--space-4);
+
+    bottom: 0;
+
+    height: 3px;
+
+    background:
+        var(--sport-accent);
+
+    border-radius:
+        3px
+        3px
+        0
+        0;
+}
+
+
+.match-navigation-item.disabled {
+    opacity:
+        0.4;
+
+    cursor:
+        default;
+}
+
+
+.statistics-card {
+    margin-top:
+        var(--space-3);
+
+    overflow: hidden;
+
+    background:
+        var(--surface);
+
+    border:
+        1px solid
+        var(--border);
+
+    border-radius:
+        var(--radius-md);
+
+    box-shadow:
+        var(--shadow-sm);
+}
+
+
+.statistics-header {
+    min-height: 54px;
+
+    padding:
+        0
+        var(--space-4);
+
+    display: flex;
+
+    align-items: center;
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.statistics-header h2 {
+    margin: 0;
+
+    font-size:
+        var(--font-md);
+}
+
+
+.statistics-container {
+    padding:
+        var(--space-2)
+        var(--space-4);
+}
+
+
+.statistics-loading,
+.no-statistics {
+    padding:
+        var(--space-6);
+
+    color:
+        var(--text-secondary);
+
+    text-align:
+        center;
+
+    font-size:
+        var(--font-sm);
+}
+
+
+.stat-row {
+    min-height: 48px;
+
+    display: grid;
+
+    grid-template-columns:
+        80px
+        minmax(150px, 1fr)
+        80px;
+
+    align-items: center;
+
+    gap:
+        var(--space-3);
+
+    border-bottom:
+        1px solid
+        var(--border);
+}
+
+
+.stat-row:last-child {
+    border-bottom: 0;
+}
+
+
+.stat-value {
+    font-size:
+        var(--font-sm);
+
+    font-weight:
+        700;
+}
+
+
+.stat-value.home {
+    text-align:
+        right;
+}
+
+
+.stat-value.away {
+    text-align:
+        left;
+}
+
+
+.stat-name {
+    color:
+        var(--text-secondary);
+
+    font-size:
+        var(--font-xs);
+
+    font-weight:
+        600;
+
+    text-align:
+        center;
+}
+
+
+@media (max-width: 700px) {
+
+    .match-page-inner {
+        padding:
+            var(--space-3);
+    }
+
+
+    .scoreboard-main {
+        min-height: 180px;
+
+        padding:
+            var(--space-4);
+
+        grid-template-columns:
+            1fr
+            100px
+            1fr;
+
+        gap:
+            var(--space-2);
+    }
+
+
+    .team-placeholder {
+        width: 50px;
+        height: 50px;
+
+        border-radius:
+            12px;
+    }
+
+
+    .scoreboard-team h1 {
+        font-size:
+            14px;
+    }
+
+
+    .main-score {
+        gap:
+            var(--space-2);
+
+        font-size:
+            30px;
+    }
+
+
+    .stat-row {
+        grid-template-columns:
+            55px
+            minmax(100px, 1fr)
+            55px;
+    }
+
+}

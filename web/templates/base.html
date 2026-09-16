@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        {% block title %}
+        PL Analytics
+        {% endblock %}
+    </title>
+
+    <link
+        rel="stylesheet"
+        href="/assets/css/base.css?v=2"
+    >
+
+    {% block styles %}
+    {% endblock %}
+</head>
+
+
+<body class="sport-{{ sport }}">
+
+    <header class="site-header">
+
+        <div class="site-header-inner">
+
+            <a
+                href="/"
+                class="brand"
+            >
+
+                <div class="brand-mark">
+                    PA
+                </div>
+
+                <div class="brand-text">
+
+                    <span class="brand-name">
+                        PL Analytics
+                    </span>
+
+                    <span class="brand-tagline">
+                        sports data platform
+                    </span>
+
+                </div>
+
+            </a>
+
+
+            <nav class="main-navigation">
+
+                <a
+                    href="/"
+                    class="navigation-link {% if active_page == 'scores' %}active{% endif %}"
+                >
+                    Scores
+                </a>
+
+                <span class="navigation-link disabled">
+                    Teams
+                </span>
+
+                <span class="navigation-link disabled">
+                    Players
+                </span>
+
+                <span class="navigation-link disabled">
+                    Predictions
+                </span>
+
+            </nav>
+
+
+            <div class="header-actions">
+
+                <button
+                    class="icon-button"
+                    type="button"
+                    aria-label="Search"
+                >
+                    <span class="search-icon">
+                    </span>
+
+                    <span class="search-text">
+                        Search
+                    </span>
+                </button>
+
+                <button
+                    class="account-button"
+                    type="button"
+                >
+                    Sign in
+                </button>
+
+            </div>
+
+        </div>
+
+    </header>
+
+
+    <nav class="sport-navigation">
+
+        <div class="sport-navigation-inner">
+
+            <a
+                href="/"
+                class="sport-navigation-link active"
+            >
+                <span class="sport-dot">
+                </span>
+
+                Football
+            </a>
+
+            <span class="sport-navigation-link disabled">
+                Formula 1
+            </span>
+
+            <span class="sport-navigation-link disabled">
+                Hockey
+            </span>
+
+            <span class="sport-navigation-link disabled">
+                Tennis
+            </span>
+
+        </div>
+
+    </nav>
+
+
+    <main class="site-main">
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    <footer class="site-footer">
+
+        <div class="site-footer-inner">
+
+            <div>
+                <strong>
+                    PL Analytics
+                </strong>
+
+                <span>
+                    sports data platform
+                </span>
+            </div>
+
+            <span>
+                Data, statistics and predictions
+            </span>
+
+        </div>
+
+    </footer>
+
+
+    {% block scripts %}
+    {% endblock %}
+
+</body>
+
+</html>

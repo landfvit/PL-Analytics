@@ -3,16 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
     >
 
-    <title>Premier League Analytics</title>
+    <title>Premier League Analytics Admin</title>
 
     <link
         rel="stylesheet"
-        href="/static/styles.css"
+        href="/static/admin.css"
     >
 </head>
 
@@ -21,7 +22,7 @@
     <header class="header">
         <div>
             <h1>Premier League Analytics</h1>
-            <p>Data management dashboard</p>
+            <p>Developer dashboard</p>
         </div>
 
         <div
@@ -31,6 +32,7 @@
             checking api...
         </div>
     </header>
+
 
     <main class="container">
 
@@ -44,11 +46,13 @@
             </div>
         </section>
 
+
         <section>
             <h2>Season coverage</h2>
 
             <div class="table-container">
                 <table>
+
                     <thead>
                         <tr>
                             <th>Season</th>
@@ -63,9 +67,11 @@
 
                     <tbody id="season-table">
                     </tbody>
+
                 </table>
             </div>
         </section>
+
 
         <section>
             <h2>Data quality</h2>
@@ -77,11 +83,13 @@
             </div>
         </section>
 
+
         <section>
             <h2>Recent imports</h2>
 
             <div class="table-container">
                 <table>
+
                     <thead>
                         <tr>
                             <th>Type</th>
@@ -95,9 +103,11 @@
 
                     <tbody id="imports-table">
                     </tbody>
+
                 </table>
             </div>
         </section>
+
 
         <section>
             <h2>Fixtures</h2>
@@ -116,6 +126,7 @@
                     </select>
                 </div>
 
+
                 <div class="filter">
                     <label for="team-filter">
                         Team
@@ -128,12 +139,14 @@
                     </select>
                 </div>
 
+
                 <div class="filter">
                     <label for="data-status-filter">
                         Data status
                     </label>
 
                     <select id="data-status-filter">
+
                         <option value="">
                             All
                         </option>
@@ -149,8 +162,10 @@
                         <option value="missing">
                             Missing
                         </option>
+
                     </select>
                 </div>
+
 
                 <div class="filter">
                     <label for="limit-filter">
@@ -158,6 +173,7 @@
                     </label>
 
                     <select id="limit-filter">
+
                         <option value="20">
                             20
                         </option>
@@ -176,8 +192,10 @@
                         <option value="100">
                             100
                         </option>
+
                     </select>
                 </div>
+
 
                 <button
                     id="reset-filters"
@@ -188,14 +206,17 @@
 
             </div>
 
+
             <p
                 class="fixture-count"
                 id="fixture-count"
             >
             </p>
 
+
             <div class="table-container">
                 <table>
+
                     <thead>
                         <tr>
                             <th>Date</th>
@@ -209,9 +230,11 @@
 
                     <tbody id="fixtures-table">
                     </tbody>
+
                 </table>
             </div>
         </section>
+
 
         <section>
             <h2>Teams</h2>
@@ -225,8 +248,9 @@
 
     </main>
 
+
     <script
-        src="/static/app.js?v=5"
+        src="/static/admin.js?v=1"
         defer
     ></script>
 
