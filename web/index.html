@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-
     <meta
         name="viewport"
         content="width=device-width, initial-scale=1.0"
@@ -32,7 +32,6 @@
         </div>
     </header>
 
-
     <main class="container">
 
         <section>
@@ -42,14 +41,8 @@
                 class="cards"
                 id="overview-cards"
             >
-                <div class="card">
-                    <div class="card-label">
-                        Loading data...
-                    </div>
-                </div>
             </div>
         </section>
-
 
         <section>
             <h2>Season coverage</h2>
@@ -74,7 +67,6 @@
             </div>
         </section>
 
-
         <section>
             <h2>Data quality</h2>
 
@@ -84,7 +76,6 @@
             >
             </div>
         </section>
-
 
         <section>
             <h2>Recent imports</h2>
@@ -108,17 +99,100 @@
             </div>
         </section>
 
-
         <section>
-            <div class="section-header">
-                <h2>Fixtures</h2>
+            <h2>Fixtures</h2>
 
-                <select id="season-filter">
-                    <option value="">
-                        All seasons
-                    </option>
-                </select>
+            <div class="filters">
+
+                <div class="filter">
+                    <label for="season-filter">
+                        Season
+                    </label>
+
+                    <select id="season-filter">
+                        <option value="">
+                            All seasons
+                        </option>
+                    </select>
+                </div>
+
+                <div class="filter">
+                    <label for="team-filter">
+                        Team
+                    </label>
+
+                    <select id="team-filter">
+                        <option value="">
+                            All teams
+                        </option>
+                    </select>
+                </div>
+
+                <div class="filter">
+                    <label for="data-status-filter">
+                        Data status
+                    </label>
+
+                    <select id="data-status-filter">
+                        <option value="">
+                            All
+                        </option>
+
+                        <option value="complete">
+                            Complete
+                        </option>
+
+                        <option value="partial">
+                            Partial
+                        </option>
+
+                        <option value="missing">
+                            Missing
+                        </option>
+                    </select>
+                </div>
+
+                <div class="filter">
+                    <label for="limit-filter">
+                        Results
+                    </label>
+
+                    <select id="limit-filter">
+                        <option value="20">
+                            20
+                        </option>
+
+                        <option
+                            value="30"
+                            selected
+                        >
+                            30
+                        </option>
+
+                        <option value="50">
+                            50
+                        </option>
+
+                        <option value="100">
+                            100
+                        </option>
+                    </select>
+                </div>
+
+                <button
+                    id="reset-filters"
+                    class="button"
+                >
+                    Reset filters
+                </button>
+
             </div>
+
+            <p
+                class="fixture-count"
+                id="fixture-count"
+            >
+            </p>
 
             <div class="table-container">
                 <table>
@@ -139,7 +213,6 @@
             </div>
         </section>
 
-
         <section>
             <h2>Teams</h2>
 
@@ -152,8 +225,11 @@
 
     </main>
 
-
-    <script src="/static/app.js"></script>
+    <script
+        src="/static/app.js?v=5"
+        defer
+    ></script>
 
 </body>
+
 </html>

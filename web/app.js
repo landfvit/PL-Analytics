@@ -26,13 +26,35 @@ const seasonFilter = document.getElementById(
     "season-filter"
 );
 
+const teamFilter = document.getElementById(
+    "team-filter"
+);
+
+const dataStatusFilter = document.getElementById(
+    "data-status-filter"
+);
+
+const limitFilter = document.getElementById(
+    "limit-filter"
+);
+
+const resetFiltersButton = document.getElementById(
+    "reset-filters"
+);
+
+const fixtureCount = document.getElementById(
+    "fixture-count"
+);
+
 const apiStatus = document.getElementById(
     "api-status"
 );
 
 
 async function fetchJSON(url) {
-    const response = await fetch(url);
+    const response = await fetch(
+        url
+    );
 
     if (!response.ok) {
         throw new Error(
@@ -49,14 +71,18 @@ function formatDate(value) {
         return "";
     }
 
-    const date = new Date(value);
+    const date = new Date(
+        value
+    );
 
     return date.toLocaleString();
 }
 
 
 function formatSeason(season) {
-    return `${season}/${String(season + 1).slice(-2)}`;
+    return `${season}/${String(
+        season + 1
+    ).slice(-2)}`;
 }
 
 
@@ -67,11 +93,16 @@ async function loadHealth() {
         );
 
         apiStatus.textContent = data.status;
-        apiStatus.className = "api-status ok";
+
+        apiStatus.className =
+            "api-status ok";
 
     } catch (error) {
-        apiStatus.textContent = "offline";
-        apiStatus.className = "api-status error";
+        apiStatus.textContent =
+            "offline";
+
+        apiStatus.className =
+            "api-status error";
     }
 }
 
@@ -88,7 +119,8 @@ async function loadSeasons() {
     let totalMissingStats = 0;
 
     for (const season of data.seasons) {
-        totalFixtures += season.total_fixtures;
+        totalFixtures +=
+            season.total_fixtures;
 
         totalCompleteStats +=
             season.fixtures_with_complete_stats;
@@ -101,17 +133,40 @@ async function loadSeasons() {
         );
 
         row.innerHTML = `
-            <td>${formatSeason(season.season)}</td>
-            <td>${season.teams}</td>
-            <td>${season.total_fixtures}</td>
-            <td>${season.finished_fixtures}</td>
-            <td>${season.fixtures_with_complete_stats}</td>
-            <td>${season.fixtures_without_stats}</td>
-            <td>${season.statistics_coverage_percentage}%</td>
+            <td>
+                ${formatSeason(season.season)}
+            </td>
+
+            <td>
+                ${season.teams}
+            </td>
+
+            <td>
+                ${season.total_fixtures}
+            </td>
+
+            <td>
+                ${season.finished_fixtures}
+            </td>
+
+            <td>
+                ${season.fixtures_with_complete_stats}
+            </td>
+
+            <td>
+                ${season.fixtures_without_stats}
+            </td>
+
+            <td>
+                ${season.statistics_coverage_percentage}%
+            </td>
         `;
 
-        seasonTable.appendChild(row);
+        seasonTable.appendChild(
+            row
+        );
     }
+
 
     overviewCards.innerHTML = `
         <div class="card">
@@ -124,6 +179,7 @@ async function loadSeasons() {
             </div>
         </div>
 
+
         <div class="card">
             <div class="card-label">
                 Fixtures
@@ -134,6 +190,7 @@ async function loadSeasons() {
             </div>
         </div>
 
+
         <div class="card">
             <div class="card-label">
                 Complete statistics
@@ -143,6 +200,7 @@ async function loadSeasons() {
                 ${totalCompleteStats}
             </div>
         </div>
+
 
         <div class="card">
             <div class="card-label">
@@ -155,6 +213,7 @@ async function loadSeasons() {
         </div>
     `;
 
+
     seasonFilter.innerHTML = `
         <option value="">
             All seasons
@@ -166,11 +225,13 @@ async function loadSeasons() {
             "option"
         );
 
-        option.value = season.season;
+        option.value =
+            season.season;
 
-        option.textContent = formatSeason(
-            season.season
-        );
+        option.textContent =
+            formatSeason(
+                season.season
+            );
 
         seasonFilter.appendChild(
             option
@@ -191,7 +252,8 @@ async function loadQuality() {
             "div"
         );
 
-        item.className = "quality-item";
+        item.className =
+            "quality-item";
 
         const statusClass = (
             check.issues === 0
@@ -206,7 +268,10 @@ async function loadQuality() {
         );
 
         const name = check.name
-            .replaceAll("_", " ");
+            .replaceAll(
+                "_",
+                " "
+            );
 
         item.innerHTML = `
             <span class="quality-name">
@@ -239,20 +304,34 @@ async function loadImports() {
 
         let statusClass = "";
 
-        if (importRun.status === "success") {
-            statusClass = "import-success";
+        if (
+            importRun.status ===
+            "success"
+        ) {
+            statusClass =
+                "import-success";
         }
 
-        if (importRun.status === "partial") {
-            statusClass = "import-partial";
+        if (
+            importRun.status ===
+            "partial"
+        ) {
+            statusClass =
+                "import-partial";
         }
 
-        if (importRun.status === "failed") {
-            statusClass = "import-failed";
+        if (
+            importRun.status ===
+            "failed"
+        ) {
+            statusClass =
+                "import-failed";
         }
 
         row.innerHTML = `
-            <td>${importRun.import_type}</td>
+            <td>
+                ${importRun.import_type}
+            </td>
 
             <td>
                 ${
@@ -283,25 +362,108 @@ async function loadImports() {
             </td>
         `;
 
-        importsTable.appendChild(row);
+        importsTable.appendChild(
+            row
+        );
     }
 }
 
 
-async function loadFixtures(
-    season = ""
-) {
-    let url = "/api/fixtures?limit=30";
+async function loadTeams() {
+    const data = await fetchJSON(
+        "/api/teams"
+    );
 
-    if (season) {
-        url += `&season=${season}`;
+    teamsGrid.innerHTML = "";
+
+    teamFilter.innerHTML = `
+        <option value="">
+            All teams
+        </option>
+    `;
+
+    for (const team of data.teams) {
+        const option = document.createElement(
+            "option"
+        );
+
+        option.value =
+            team.team_name;
+
+        option.textContent =
+            team.team_name;
+
+        teamFilter.appendChild(
+            option
+        );
+
+
+        const card = document.createElement(
+            "div"
+        );
+
+        card.className =
+            "team-card";
+
+        card.innerHTML = `
+            <div class="team-name">
+                ${team.team_name}
+            </div>
+
+            <div class="team-fixtures">
+                ${team.fixtures} fixtures
+            </div>
+        `;
+
+        teamsGrid.appendChild(
+            card
+        );
     }
+}
+
+
+async function loadFixtures() {
+    const params = new URLSearchParams();
+
+    params.set(
+        "limit",
+        limitFilter.value
+    );
+
+    if (seasonFilter.value) {
+        params.set(
+            "season",
+            seasonFilter.value
+        );
+    }
+
+    if (teamFilter.value) {
+        params.set(
+            "team",
+            teamFilter.value
+        );
+    }
+
+    if (dataStatusFilter.value) {
+        params.set(
+            "data_status",
+            dataStatusFilter.value
+        );
+    }
+
+    const url = (
+        `/api/fixtures?${params.toString()}`
+    );
 
     const data = await fetchJSON(
         url
     );
 
     fixturesTable.innerHTML = "";
+
+    fixtureCount.textContent =
+        `${data.count} fixtures shown`;
+
 
     for (const fixture of data.fixtures) {
         const row = document.createElement(
@@ -314,28 +476,35 @@ async function loadFixtures(
             fixture.data_status ===
             "complete"
         ) {
-            dataClass = "status-complete";
+            dataClass =
+                "status-complete";
         }
 
         if (
             fixture.data_status ===
             "partial"
         ) {
-            dataClass = "status-partial";
+            dataClass =
+                "status-partial";
         }
 
         if (
             fixture.data_status ===
             "missing"
         ) {
-            dataClass = "status-missing";
+            dataClass =
+                "status-missing";
         }
 
         const score = (
             fixture.home_goals !== null
             && fixture.away_goals !== null
         )
-            ? `${fixture.home_goals} - ${fixture.away_goals}`
+            ? (
+                `${fixture.home_goals}`
+                + " - "
+                + `${fixture.away_goals}`
+            )
             : "-";
 
         row.innerHTML = `
@@ -368,39 +537,20 @@ async function loadFixtures(
             </td>
         `;
 
-        fixturesTable.appendChild(row);
+        fixturesTable.appendChild(
+            row
+        );
     }
 }
 
 
-async function loadTeams() {
-    const data = await fetchJSON(
-        "/api/teams"
-    );
+function resetFilters() {
+    seasonFilter.value = "";
+    teamFilter.value = "";
+    dataStatusFilter.value = "";
+    limitFilter.value = "30";
 
-    teamsGrid.innerHTML = "";
-
-    for (const team of data.teams) {
-        const card = document.createElement(
-            "div"
-        );
-
-        card.className = "team-card";
-
-        card.innerHTML = `
-            <div class="team-name">
-                ${team.team_name}
-            </div>
-
-            <div class="team-fixtures">
-                ${team.fixtures} fixtures
-            </div>
-        `;
-
-        teamsGrid.appendChild(
-            card
-        );
-    }
+    loadFixtures();
 }
 
 
@@ -408,16 +558,21 @@ async function loadDashboard() {
     try {
         await loadHealth();
 
-        await Promise.all([
-            loadSeasons(),
-            loadQuality(),
-            loadImports(),
-            loadFixtures(),
-            loadTeams()
-        ]);
+        await Promise.all(
+            [
+                loadSeasons(),
+                loadQuality(),
+                loadImports(),
+                loadTeams()
+            ]
+        );
+
+        await loadFixtures();
 
     } catch (error) {
-        console.error(error);
+        console.error(
+            error
+        );
 
         overviewCards.innerHTML = `
             <div class="error-message">
@@ -430,11 +585,27 @@ async function loadDashboard() {
 
 seasonFilter.addEventListener(
     "change",
-    () => {
-        loadFixtures(
-            seasonFilter.value
-        );
-    }
+    loadFixtures
+);
+
+teamFilter.addEventListener(
+    "change",
+    loadFixtures
+);
+
+dataStatusFilter.addEventListener(
+    "change",
+    loadFixtures
+);
+
+limitFilter.addEventListener(
+    "change",
+    loadFixtures
+);
+
+resetFiltersButton.addEventListener(
+    "click",
+    resetFilters
 );
 
 

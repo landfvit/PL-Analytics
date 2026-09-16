@@ -93,7 +93,9 @@ def get_imports(
         ORDER BY started_at DESC
         LIMIT %s;
         """,
-        (limit,)
+        (
+            limit,
+        )
     )
 
     return {
@@ -289,6 +291,7 @@ def get_teams():
         SELECT
             t.team_id,
             t.team_name,
+
             COUNT(
                 DISTINCT f.fixture_id
             ) AS fixtures
@@ -318,8 +321,9 @@ def get_fixtures(
     season: int | None = None,
     status: str | None = None,
     data_status: str | None = None,
+    team: str | None = None,
     limit: int = Query(
-        default=100,
+        default=30,
         ge=1,
         le=500
     )
@@ -350,28 +354,52 @@ def get_fixtures(
             AND season = %s
         """
 
-        params.append(season)
+        params.append(
+            season
+        )
 
     if status is not None:
         query += """
             AND status = %s
         """
 
-        params.append(status)
+        params.append(
+            status
+        )
 
     if data_status is not None:
         query += """
             AND data_status = %s
         """
 
-        params.append(data_status)
+        params.append(
+            data_status
+        )
+
+    if team is not None:
+        query += """
+            AND (
+                home_team = %s
+                OR away_team = %s
+            )
+        """
+
+        params.append(
+            team
+        )
+
+        params.append(
+            team
+        )
 
     query += """
         ORDER BY match_date DESC
         LIMIT %s;
     """
 
-    params.append(limit)
+    params.append(
+        limit
+    )
 
     rows = fetch_all(
         query,
