@@ -135,7 +135,6 @@ def get_data_quality():
         """
         SELECT COUNT(*) AS count
         FROM fixtures
-
         WHERE status = 'FT'
           AND (
               home_goals IS NULL
@@ -170,7 +169,6 @@ def get_data_quality():
         """
         SELECT COUNT(*) AS count
         FROM fixture_statistics
-
         WHERE ball_possession < 0
            OR ball_possession > 100;
         """
@@ -187,7 +185,6 @@ def get_data_quality():
         """
         SELECT COUNT(*) AS count
         FROM fixture_statistics
-
         WHERE passes_percentage < 0
            OR passes_percentage > 100;
         """
@@ -204,7 +201,6 @@ def get_data_quality():
         """
         SELECT COUNT(*) AS count
         FROM fixture_statistics
-
         WHERE shots_on_goal < 0
            OR shots_off_goal < 0
            OR total_shots < 0
@@ -325,8 +321,9 @@ def get_fixtures(
     season: int | None = None,
     status: str | None = None,
     data_status: str | None = None,
+    team: str | None = None,
     limit: int = Query(
-        default=100,
+        default=30,
         ge=1,
         le=500
     )
@@ -377,6 +374,22 @@ def get_fixtures(
 
         params.append(
             data_status
+        )
+
+    if team is not None:
+        query += """
+            AND (
+                home_team = %s
+                OR away_team = %s
+            )
+        """
+
+        params.append(
+            team
+        )
+
+        params.append(
+            team
         )
 
     query += """
