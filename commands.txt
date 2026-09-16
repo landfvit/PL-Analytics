@@ -1,0 +1,137 @@
+## Useful Commands
+
+### Virtual environment
+
+Activate the virtual environment:
+
+```bash
+source .venv/bin/activate
+```
+
+Deactivate it:
+
+```bash
+deactivate
+```
+
+Install project dependencies:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Update `requirements.txt`:
+
+```bash
+python -m pip freeze > requirements.txt
+```
+
+### PostgreSQL
+
+Open the project database:
+
+```bash
+psql PL-Analytics
+```
+
+Exit PostgreSQL:
+
+```sql
+\q
+```
+
+Run a database migration:
+
+```bash
+psql PL-Analytics -f database/008_data_manage.sql
+```
+
+### Data imports
+
+Import Premier League fixtures:
+
+```bash
+python src/fixtures.py
+```
+
+Import fixture statistics:
+
+```bash
+python src/stats_import.py
+```
+
+Check available data and statistics coverage:
+
+```bash
+python src/data_status.py
+```
+
+Run data quality checks:
+
+```bash
+python src/data_quality.py
+```
+
+### Machine learning
+
+Run the current baseline model:
+
+```bash
+python ml/train_baseline.py
+```
+
+Compare prediction models:
+
+```bash
+python ml/compare_models.py
+```
+
+### FastAPI and dashboard
+
+Start the API and dashboard:
+
+```bash
+python -m uvicorn api.main:app --port 8001
+```
+
+Start with automatic reload during development:
+
+```bash
+python -m uvicorn api.main:app --reload --reload-dir api --reload-dir web --port 8001
+```
+
+Open the dashboard:
+
+```text
+http://127.0.0.1:8001/
+```
+
+Open FastAPI documentation:
+
+```text
+http://127.0.0.1:8001/docs
+```
+
+Check API health:
+
+```text
+http://127.0.0.1:8001/api/health
+```
+
+```
+
+Check installed FastAPI version:
+
+```bash
+python -m pip show fastapi
+```
+
+Check available API routes:
+
+```bash
+python -c "import api.main; print([route.path for route in api.main.app.routes])"
+```
+
+
+```
+

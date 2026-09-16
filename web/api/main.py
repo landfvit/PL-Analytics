@@ -93,9 +93,7 @@ def get_imports(
         ORDER BY started_at DESC
         LIMIT %s;
         """,
-        (
-            limit,
-        )
+        (limit,)
     )
 
     return {
@@ -135,7 +133,6 @@ def get_data_quality():
         """
         SELECT COUNT(*) AS count
         FROM fixtures
-
         WHERE status = 'FT'
           AND (
               home_goals IS NULL
@@ -170,7 +167,6 @@ def get_data_quality():
         """
         SELECT COUNT(*) AS count
         FROM fixture_statistics
-
         WHERE ball_possession < 0
            OR ball_possession > 100;
         """
@@ -187,7 +183,6 @@ def get_data_quality():
         """
         SELECT COUNT(*) AS count
         FROM fixture_statistics
-
         WHERE passes_percentage < 0
            OR passes_percentage > 100;
         """
@@ -204,7 +199,6 @@ def get_data_quality():
         """
         SELECT COUNT(*) AS count
         FROM fixture_statistics
-
         WHERE shots_on_goal < 0
            OR shots_off_goal < 0
            OR total_shots < 0
@@ -295,7 +289,6 @@ def get_teams():
         SELECT
             t.team_id,
             t.team_name,
-
             COUNT(
                 DISTINCT f.fixture_id
             ) AS fixtures
@@ -357,36 +350,28 @@ def get_fixtures(
             AND season = %s
         """
 
-        params.append(
-            season
-        )
+        params.append(season)
 
     if status is not None:
         query += """
             AND status = %s
         """
 
-        params.append(
-            status
-        )
+        params.append(status)
 
     if data_status is not None:
         query += """
             AND data_status = %s
         """
 
-        params.append(
-            data_status
-        )
+        params.append(data_status)
 
     query += """
         ORDER BY match_date DESC
         LIMIT %s;
     """
 
-    params.append(
-        limit
-    )
+    params.append(limit)
 
     rows = fetch_all(
         query,
