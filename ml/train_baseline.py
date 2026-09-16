@@ -81,6 +81,7 @@ with conn.cursor() as cursor:
 
     fixture_rows = cursor.fetchall()
 
+
 fixture_columns = [
     "fixture_id",
     "match_date",
@@ -131,6 +132,7 @@ with conn.cursor() as cursor:
     )
 
     feature_rows = cursor.fetchall()
+
 
 feature_columns = [
     "fixture_id",
@@ -276,6 +278,12 @@ df = df.merge(
 )
 
 
+# keep chronological order
+df = df.sort_values(
+    "match_date"
+).reset_index(drop=True)
+
+
 # create signed difference features
 df["points_last_5_diff"] = (
     df["home_points_last_5"]
@@ -406,7 +414,21 @@ print(
 )
 
 
-# train model
+# show class distribution
+print()
+print("training class distribution:")
+print(
+    y_train.value_counts()
+)
+
+print()
+print("test class distribution:")
+print(
+    y_test.value_counts()
+)
+
+
+# train balanced model
 model = Pipeline(
     [
         (
@@ -416,7 +438,8 @@ model = Pipeline(
         (
             "logistic",
             LogisticRegression(
-                max_iter=1000
+                max_iter=1000,
+                class_weight="balanced"
             )
         )
     ]
